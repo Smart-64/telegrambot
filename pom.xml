@@ -39,6 +39,14 @@
             <scope>runtime</scope>
             <optional>true</optional>
         </dependency>
+
+        <!-- КМ Telegram -->
+        <dependency>
+            <groupId>org.telegram</groupId>
+            <artifactId>telegrambots-spring-boot-starter</artifactId>
+            <version>6.5.0</version>
+        </dependency>
+
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
