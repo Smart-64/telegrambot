@@ -16,20 +16,21 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 @Slf4j
 @Component
 public class Bot extends TelegramLongPollingBot {
-    @Value("${telegram.bot.token}")
-    private String botToken;
+    private final String botToken;
+    private final String botUsername;
 
-    @Value("${telegram.bot.username}")
-    private String botUsername;
-
-    public Bot() {
-        System.out.println("Token: " + botToken);
-        System.out.println("Username: " + botUsername);
+    public Bot(
+            @Value("${telegram.bot.username}") String botUsername,
+            @Value("${telegram.bot.token}") String botToken) {
+        super(botToken);
+        this.botToken = botToken;
+        this.botUsername = botUsername;
+        log.info("Bot initialized with token: {}", botToken);
     }
 
     @Override
     public void onUpdateReceived(Update update) {
-        while (update.hasMessage() && update.getMessage().hasText()) {
+        if (update.hasMessage() && update.getMessage().hasText()) {
             String chatId = update.getMessage().getChatId().toString();
             String message = update.getMessage().getText();
 
@@ -48,10 +49,5 @@ public class Bot extends TelegramLongPollingBot {
     @Override
     public String getBotUsername() {
         return this.botUsername;
-    }
-
-    @Override
-    public String getBotToken() {
-        return super.getBotToken();
     }
 }
