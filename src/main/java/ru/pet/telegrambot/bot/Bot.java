@@ -25,7 +25,7 @@ public class Bot extends TelegramLongPollingBot {
         super(botToken);
         this.botToken = botToken;
         this.botUsername = botUsername;
-        log.info("Bot initialized with token: {}", botToken);
+        log.info("Bot initialized with username: {}", botUsername);
     }
 
     @Override
@@ -33,10 +33,11 @@ public class Bot extends TelegramLongPollingBot {
         if (update.hasMessage() && update.getMessage().hasText()) {
             String chatId = update.getMessage().getChatId().toString();
             String message = update.getMessage().getText();
+            String firstName = update.getMessage().getFrom().getFirstName();
 
             SendMessage sendMessage = new SendMessage();
             sendMessage.setChatId(chatId);
-            sendMessage.setText("Ты отправил: " + message);
+            sendMessage.setText(firstName + " отправил: " + message);
 
             try {
                 execute(sendMessage);
