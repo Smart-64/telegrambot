@@ -6,9 +6,7 @@ import org.mapstruct.Named;
 import ru.pet.telegrambot.dto.UserDto;
 import ru.pet.telegrambot.model.User;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.ZoneOffset;
 
 @Mapper(componentModel = "spring")

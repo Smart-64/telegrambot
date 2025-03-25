@@ -35,24 +35,16 @@ public class Bot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         if (update.hasMessage() && update.getMessage().hasText()) {
-            userService.setUpdate(update);
 
+            userService.setUpdate(update);
             UserDto userDto = new UserDto(
                     update.getMessage().getFrom().getId(),
                     update.getMessage().getFrom().getFirstName(),
                     update.getMessage().getText(),
                     update.getMessage().getDate());
+            userService.save(userDto);
 
-            User user = userService.save(userDto);
-
-            String chatId = update.getMessage().getChatId().toString();
-            String message = update.getMessage().getText();
-            String firstName = update.getMessage().getFrom().getFirstName();
-
-            SendMessage sendMessage = new SendMessage();
-            sendMessage.setChatId(chatId);
-            sendMessage.setText(firstName + " твое сообщение {" + message + "} сохранено в БД");
-
+            SendMessage sendMessage = userService.createSendMessage();
             try {
                 execute(sendMessage);
             } catch (TelegramApiException e) {
