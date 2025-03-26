@@ -9,7 +9,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.pet.telegrambot.dto.UserDto;
-import ru.pet.telegrambot.model.User;
+import ru.pet.telegrambot.service.MessageService;
 import ru.pet.telegrambot.service.UserService;
 
 
@@ -22,21 +22,22 @@ public class Bot extends TelegramLongPollingBot {
     private final String botToken;
     private final String botUsername;
     private final UserService userService;
+    private final MessageService messageService;
 
     public Bot(
             @Value("${telegram.bot.username}") String botUsername,
-            @Value("${telegram.bot.token}") String botToken, UserService userService) {
+            @Value("${telegram.bot.token}") String botToken, UserService userService, MessageService messageService) {
         super(botToken);
         this.botToken = botToken;
         this.botUsername = botUsername;
         this.userService = userService;
+        this.messageService = messageService;
     }
 
     @Override
     public void onUpdateReceived(Update update) {
         if (update.hasMessage() && update.getMessage().hasText()) {
 
-            userService.setUpdate(update);
             UserDto userDto = new UserDto(
                     update.getMessage().getFrom().getId(),
                     update.getMessage().getFrom().getFirstName(),
@@ -44,7 +45,7 @@ public class Bot extends TelegramLongPollingBot {
                     update.getMessage().getDate());
             userService.save(userDto);
 
-            SendMessage sendMessage = userService.createSendMessage();
+            SendMessage sendMessage = messageService.createSendMessage(update);
             try {
                 execute(sendMessage);
             } catch (TelegramApiException e) {
