@@ -16,6 +16,16 @@ public class Currency {
     private Long id;
     private Long currency_code;
     private Double rate;
+    private String description;
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     private LocalDateTime updated_at;
 
     public Long getId() {

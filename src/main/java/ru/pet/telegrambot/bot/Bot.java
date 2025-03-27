@@ -52,6 +52,7 @@ public class Bot extends TelegramLongPollingBot {
                 log.error("Ошибка при отправке ответного сообщения пользователю: {}", e.getMessage());
             }
         }
+
     }
 
     @Override
